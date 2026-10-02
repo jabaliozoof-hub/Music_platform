@@ -1,0 +1,66 @@
+classDiagram
+direction TB
+    class User {
+	    +int userId
+	    +String username
+	    +String email
+	    +createPlaylist()
+	    +selectPlaylist()
+	    +selectSong()
+	    +addSongToPlaylist(playlist, song)
+	    +addAlbumToLibrary()
+	    +followArtist()
+	    +receiveNotification()
+    }
+
+    class Library {
+	    +int libraryID
+	    +addAlbum()
+	    +removeAlbum()
+	    +getSavedAlbums()
+    }
+
+    class Playlist {
+	    +int playlistId
+	    +String title
+	    +addSong()
+	    +removeSong()
+    }
+
+    class Artist {
+	    +int artistId
+	    +String name
+	    +String bio
+	    +createAlbum()
+	    +addSongToAlbum()
+    }
+
+    class Album {
+	    +int albumId
+	    +String title
+	    +int releaseYear
+	    +addSong()
+    }
+
+    class Song {
+	    +int songId
+	    +String title
+	    +int duration
+	    +play()
+    }
+
+    class Notification {
+	    +int notificationId
+	    +String message
+	    +boolean isRead
+	    +sendNotification()
+    }
+
+    User "1" --> "1" Library : owns
+    User "1" --> "*" Playlist : manages
+    User "1" --> "*" Artist : follows
+    User "1" --> "*" Notification : receives
+    Library "1" --> "*" Playlist : contains
+    Library "1" --> "*" Album : stores
+    Artist "1" --> "*" Album : creates
+    Album "1" --> "*" Song : contains
