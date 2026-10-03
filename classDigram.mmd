@@ -1,5 +1,6 @@
 classDiagram
     direction TB
+    
     class User {
         +int userId
         +String username
@@ -15,21 +16,21 @@ classDiagram
         +followArtist()
         +receiveNotification()
     }
-
+    
     class Library {
         +int libraryID
         +addAlbum()
         +removeAlbum()
         +getSavedAlbums()
     }
-
+    
     class Playlist {
         +int playlistId
         +String title
-        +addSong()
-        +removeSong()
+        +addSong(song)
+        +removeSong(song)
     }
-
+    
     class Artist {
         +int artistId
         +String name
@@ -37,21 +38,21 @@ classDiagram
         +createAlbum()
         +addSongToAlbum()
     }
-
+    
     class Album {
         +int albumId
         +String title
         +int releaseYear
         +addSong()
     }
-
+    
     class Song {
         +int songId
         +String title
         +int duration
         +play()
     }
-
+    
     class Notification {
         +int notificationId
         +String message
@@ -63,7 +64,8 @@ classDiagram
     User "1" --> "*" Playlist : manages
     User "1" --> "*" Artist : follows
     User "1" --> "*" Notification : receives
-    Library "1" --> "*" Playlist : contains
     Library "1" --> "*" Album : stores
+    Library "1" --> "*" Playlist : contains
     Artist "1" --> "*" Album : creates
     Album "1" --> "*" Song : contains
+    Playlist "*" --> "*" Song : contains
