@@ -1,59 +1,62 @@
 classDiagram
-direction TB
+    direction TB
     class User {
-	    +int userId
-	    +String username
-	    +String email
-	    +createPlaylist()
-	    +selectPlaylist()
-	    +selectSong()
-	    +addSongToPlaylist(playlist, song)
-	    +addAlbumToLibrary()
-	    +followArtist()
-	    +receiveNotification()
+        +int userId
+        +String username
+        +String email
+        +String password
+        +register()
+        +login()
+        +createPlaylist()
+        +selectPlaylist()
+        +selectSong()
+        +addSongToPlaylist(playlist, song)
+        +addAlbumToLibrary()
+        +followArtist()
+        +receiveNotification()
     }
 
     class Library {
-	    +int libraryID
-	    +addAlbum()
-	    +removeAlbum()
-	    +getSavedAlbums()
+        +int libraryID
+        +addAlbum()
+        +removeAlbum()
+        +getSavedAlbums()
     }
 
     class Playlist {
-	    +int playlistId
-	    +String title
-	    +addSong()
-	    +removeSong()
+        +int playlistId
+        +String title
+        +addSong()
+        +removeSong()
     }
 
     class Artist {
-	    +int artistId
-	    +String name
-	    +String bio
-	    +createAlbum()
-	    +addSongToAlbum()
+        +int artistId
+        +String name
+        +String bio
+        +createAlbum()
+        +addSongToAlbum()
     }
 
     class Album {
-	    +int albumId
-	    +String title
-	    +int releaseYear
-	    +addSong()
+        +int albumId
+        +String title
+        +int releaseYear
+        +addSong()
     }
 
     class Song {
-	    +int songId
-	    +String title
-	    +int duration
-	    +play()
+        +int songId
+        +String title
+        +int duration
+        +play()
     }
 
     class Notification {
-	    +int notificationId
-	    +String message
-	    +boolean isRead
-	    +sendNotification()
+        +int notificationId
+        +String message
+        +boolean isRead
+        +sendNotification()
     }
 
     User "1" --> "1" Library : owns
