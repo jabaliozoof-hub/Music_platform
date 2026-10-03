@@ -1,0 +1,25 @@
+sequenceDiagram
+    autonumber
+    actor User as User
+    participant FE as Music App (Frontend)
+    participant BE as Backend API
+    participant DB as Database
+
+    User->>FE: Selects a song
+    FE->>BE: Sends request to select song (SongID)
+    BE->>DB: Fetches song details
+    DB-->>BE: Returns song data
+    BE-->>FE: Sends song confirmation
+    
+    User->>FE: Selects a playlist
+    FE->>BE: Sends request to select playlist (PlaylistID)
+    BE->>DB: Fetches playlist details
+    DB-->>BE: Returns playlist data
+    BE-->>FE: Sends playlist confirmation
+
+    Note over FE, DB: The system adds the song to the playlist
+    FE->>BE: Sends request addSongToPlaylist (PlaylistID, SongID)
+    BE->>DB: Inserts song into playlist relation
+    DB-->>BE: Relation created successfully
+    BE-->>FE: Returns success response
+    FE-->>User: Displays message "Song added successfully to the playlist"
