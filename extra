@@ -1,0 +1,107 @@
+classDiagram
+direction TB
+class MusicApp {
+  +createAlbum(title, releaseDate) Album
+  +addNewSong(album, details) Song
+  +publishSong(song) void
+  +viewAlbumSongs(album) List~Song~
+  +viewArtist(artist) Artist
+  +createPlaylist(name) Playlist
+  +addSongToPlaylist(playlist, song) bool
+  +removeSongFromPlaylist(playlist, song) bool
+  +addAlbumToLibrary(album) bool
+  +addSongToLibrary(album) bool
+  +followArtist(artist) bool
+}
+class User {
+  -userId: int
+  -username: str
+  -email: str
+  +createPlaylist(name) Playlist
+  +addSongToPlaylist(playlist, song) bool
+  +removeSongFromPlaylist(playlist, song) bool
+  +addAlbumToLibrary(album) bool
+  +addSongToLibrary(album) bool
+  +followArtist(artist) bool
+  +unfollowArtist(artist) void
+}
+class Library {
+  -libraryId: int
+  +addAlbum(album) bool
+  +removeAlbum(album) bool
+  +addSong(song) bool
+  +removeSong(song) bool
+  +contains(album) bool
+  +getAlbums() List~Album~
+  +getSongs() List~Song~
+}
+class Playlist {
+  -playlistId: int
+  -name: str
+  +Playlist(name, owner)
+  +addSong(song) bool
+  +removeSong(song) bool
+  +contains(song) bool
+  +getSongs() List~Song~
+  +rename(name) void
+}
+class Follow {
+  -followedAt: Date
+}
+class Artist {
+  -artistId: int
+  -name: str
+  -bio: str
+  -email: str
+  -bool verified
+  +createAlbum(title, releaseDate) Album
+  +addSongToAlbum(album, details) Song
+  +publishSong(song) void
+  +notifyFollowers(song) void
+  +getDetails() Artist
+  +getAlbums() List~Album~
+}
+class Album {
+  -albumId: int
+  -title: str
+  -releaseDate: Date
+  +addSong(song) bool
+  +removeSong(song) bool
+  +containsTrackNumber(n) bool
+  +getSongs() List~Song~
+  +getArtist() Artist
+}
+class Song {
+  -songId: int
+  -title: str
+  -Date releaseDate
+  +publish() void
+  +getAlbum() Album
+  +getArtist() Artist
+}
+class Notification {
+  -notificationId: int
+  -message: str
+  -createdAt: Date
+  -bool isRead
+  +markAsRead() void
+}
+class Database {
+  +save(entity) bool
+}
+
+MusicApp "1" --> "0..1" User : signed-in listener
+MusicApp "1" --> "0..1" Artist : signed-in artist
+User "1" *-- "0..*" Playlist : creates and manages
+User "1" *-- "1" Library : owns
+User "1" *-- "0..*" Follow : follows via
+User "1" *-- "0..*" Notification : receives
+Follow "0..*" --> "1" Artist : target
+Artist "1" *-- "0..*" Album : creates
+MusicApp..> Notification : creates
+Album "1" *-- "0..*" Song : contains
+Notification "0..*" --> "1" Song : announces
+Library "0..*" o-- "0..*" Album : stores
+Library "0..*" o-- "0..*" Song : saves
+Playlist "0..*" o-- "0..*" Song : contains
+note for Database "User, Playlist, Library, Album and Artist all save through this class" 
