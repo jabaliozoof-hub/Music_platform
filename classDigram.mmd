@@ -1,71 +1,134 @@
 classDiagram
-    direction TB
-    
+
+direction TB
+
     class User {
-        +int userId
-        +String username
-        +String email
-        +String password
-        +register()
-        +login()
-        +createPlaylist()
-        +selectPlaylist()
-        +selectSong()
-        +addSongToPlaylist(playlist, song)
-        +addAlbumToLibrary()
-        +followArtist()
-        +receiveNotification()
-    }
-    
-    class Library {
-        +int libraryID
-        +addAlbum()
-        +removeAlbum()
-        +getSavedAlbums()
-    }
-    
-    class Playlist {
-        +int playlistId
-        +String title
-        +addSong(song)
-        +removeSong(song)
-    }
-    
-    class Artist {
-        +int artistId
-        +String name
-        +String bio
-        +createAlbum()
-        +addSongToAlbum()
-    }
-    
-    class Album {
-        +int albumId
-        +String title
-        +int releaseYear
-        +addSong()
-    }
-    
-    class Song {
-        +int songId
-        +String title
-        +int duration
-        +play()
-    }
-    
-    class Notification {
-        +int notificationId
-        +String message
-        +boolean isRead
-        +sendNotification()
+
+    +int userId
+
+    +String username
+
+    +String email
+
+    +String password
+
+    +register()
+
+    +login()
+
+    +createPlaylist()
+
+    +selectPlaylist()
+
+    +selectSong()
+
+    +brawose()
+
+    +addSongToPlaylist(playlist, song)
+
+    +addAlbumToLibrary()
+
+    +followArtist()
+
+    +receiveNotification()
+
     }
 
-    User "1" --> "1" Library : owns
-    User "1" --> "*" Playlist : manages
-    User "1" --> "*" Artist : follows
-    User "1" --> "*" Notification : receives
-    Library "1" --> "*" Album : stores
-    Library "1" --> "*" Playlist : contains
-    Artist "1" --> "*" Album : creates
-    Album "1" --> "*" Song : contains
-    Playlist "*" --> "*" Song : contains
+
+
+    class Library {
+
+    +int libraryID
+
+    +addAlbum()
+
+    +removeAlbum()
+
+    +getSavedAlbums()
+
+    }
+
+
+
+    class Playlist {
+
+    +int playlistId
+
+    +String title
+
+    +addSong(song)
+
+    +removeSong(song)
+
+    }
+
+
+
+    class Artist {
+
+    +int artistId
+
+    +String name
+
+    +String bio
+
+    +createAlbum()
+
+    +addSongToAlbum()
+
+    }
+
+
+
+    class Album {
+
+    +int albumId
+
+    +String title
+
+    +int releaseYear
+
+    +addSong()
+
+    }
+
+
+
+    class Song {
+
+    +int songId
+
+    +String title
+
+    +int duration
+
+    +play()
+
+    }
+
+
+
+    class Notification {
+
+    +int notificationId
+
+    +String message
+
+    +boolean isRead
+
+    +sendNotification()
+
+    }
+
+
+
+User "1" *-- "0..*" Playlist : creates and manages
+User "1" *-- "1" Library : owns
+User "1" *-- "0..*" Notification : receives
+Artist "1" *-- "0..*" Album : creates
+Artist ..> Notification : creates
+Album "1" *-- "0..*" Song : contains
+Notification "0..*" --> "1" Song : announces
+Library "0..*" o-- "0..*" Album : stores
+Library "0..*" o-- "0..*" Song : saves
+Playlist "0..*" o-- "0..*" Song : contains
