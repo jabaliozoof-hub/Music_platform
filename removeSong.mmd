@@ -1,0 +1,26 @@
+sequenceDiagram
+    actor User
+    participant App as MusicApp
+    participant Playlist
+    participant Song
+    participant Database
+
+    User->>App: selectPlaylist(Playlist)
+    App->>Playlist: getSongs()
+    Playlist-->>App: List of Songs
+    App-->>User: Show songs
+    User->>App: selectSong(Song)
+    App->>Playlist: removeSong(Song)
+    Playlist->>Song: getSongId()
+    Song-->>Playlist: songId
+
+    alt Song is in the playlist
+        Playlist->>Playlist: Remove song from playlist
+        Playlist->>Database: save(Playlist)
+        Database-->>Playlist: Saved
+        Playlist-->>App: true
+        App-->>User: Song removed
+    else Song is not in the playlist
+        Playlist-->>App: false
+        App-->>User: Song not found in playlist
+    end
