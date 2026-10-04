@@ -1,26 +1,36 @@
 sequenceDiagram
+
     actor User
-    participant App as MusicApp
+
+    participant App as Music App (Frontend)
+    participant Backend as Backend API
     participant Playlist
     participant Song
     participant Database
 
-    User->>App: selectPlaylist(Playlist)
-    App->>Playlist: getSongs()
-    Playlist-->>App: List of Songs
+    User->>App: Select playlist (Playlist)
+    App->>Backend: Request playlist songs (PlaylistID)
+    Backend->>Playlist: getSongs()
+    Playlist-->>Backend: List of Songs
+    Backend-->>App: List of Songs
     App-->>User: Show songs
-    User->>App: selectSong(Song)
-    App->>Playlist: removeSong(Song)
+    User->>App: Select song (Song)
+    App->>Backend: removeSong(UserID, PlaylistID, SongID)
+    Backend->>Playlist: Check if song exists (SongID)
     Playlist->>Song: getSongId()
     Song-->>Playlist: songId
 
     alt Song is in the playlist
         Playlist->>Playlist: Remove song from playlist
-        Playlist->>Database: save(Playlist)
-        Database-->>Playlist: Saved
-        Playlist-->>App: true
+        Playlist-->>Backend: Song removed successfully
+        Backend->>Database: save(Playlist)
+        Database-->>Backend: Saved
+        Backend-->>App: true
         App-->>User: Song removed
+
     else Song is not in the playlist
-        Playlist-->>App: false
+        Playlist-->>Backend: false
+        Backend-->>App: false
         App-->>User: Song not found in playlist
+
     end
