@@ -1,0 +1,73 @@
+sequenceDiagram
+    autonumber
+    %% Actors & Systems
+    actor User as User
+    participant App as Music App (Frontend)
+    participant Auth as Authentication Service
+    participant Backend as Backend API
+    participant DB as Database
+
+    %% ---------------------------
+    %% 1. Account Creation
+    %% ---------------------------
+    User->>App: Opens the app and selects "Create New Account"
+    App->>User: Displays registration form (Email, Password, Username)
+
+    User->>App: Enters account information
+    App->>Auth: Sends account creation request (Email, Password, Username)
+
+    Auth->>DB: Checks if email already exists
+    DB-->>Auth: Email does not exist
+
+    Auth->>DB: Creates new user record
+    DB-->>Auth: User created successfully
+
+    Auth-->>App: Returns UserID + JWT token
+    App-->>User: Shows message "Account created successfully"
+
+    %% ---------------------------
+    %% 2. Login
+    %% ---------------------------
+    User->>App: Selects "Login"
+    App->>User: Displays login form
+
+    User->>App: Enters email + password
+    App->>Auth: Sends login request (Email, Password)
+
+    Auth->>DB: Validates user credentials
+    DB-->>Auth: Credentials valid
+
+    Auth-->>App: Returns new JWT token
+    App-->>User: Redirects to home screen
+
+    %% ---------------------------
+    %% 3. Browse Artists
+    %% ---------------------------
+    User->>App: Searches for an artist or opens artist page
+    App->>Backend: Requests artist data (ArtistID)
+    Backend->>DB: Fetches artist information
+    DB-->>Backend: Artist data returned
+    Backend-->>App: Sends artist data
+    App-->>User: Displays artist page + "Follow" button
+
+    %% ---------------------------
+    %% 4. Follow Artist
+    %% ---------------------------
+    User->>App: Clicks "Follow Artist"
+    App->>Backend: Sends follow request (UserID, ArtistID)
+
+    Backend->>DB: Checks if follow relation already exists
+    DB-->>Backend: No existing relation
+
+    Backend->>DB: Creates new follow relation
+    DB-->>Backend: Follow saved successfully
+
+    Backend-->>App: Returns success response
+    App-->>User: Updates UI (button changes to "Following")
+
+    %% ---------------------------
+    %% 5. Optional: Sync & Notifications
+    %% ---------------------------
+    Backend->>DB: Updates user's followed artists list
+    Backend->>App: Sends optional notification "You will receive artist updates"
+    App-->>User: Displays notification
