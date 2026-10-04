@@ -1,25 +1,38 @@
 sequenceDiagram
-    autonumber
-    actor User as User
-    participant FE as Music App (Frontend)
-    participant BE as Backend API
-    participant DB as Database
 
-    User->>FE: Selects a song
-    FE->>BE: Sends request to select song (SongID)
-    BE->>DB: Fetches song details
-    DB-->>BE: Returns song data
-    BE-->>FE: Sends song confirmation
-    
-    User->>FE: Selects a playlist
-    FE->>BE: Sends request to select playlist (PlaylistID)
-    BE->>DB: Fetches playlist details
-    DB-->>BE: Returns playlist data
-    BE-->>FE: Sends playlist confirmation
+    actor User
 
-    Note over FE, DB: The system adds the song to the playlist
-    FE->>BE: Sends request addSongToPlaylist (PlaylistID, SongID)
-    BE->>DB: Inserts song into playlist relation
-    DB-->>BE: Relation created successfully
-    BE-->>FE: Returns success response
-    FE-->>User: Displays message "Song added successfully to the playlist"
+    participant App as Music App (Frontend)
+    participant Backend as Backend API
+    participant Playlist
+    participant Song
+    participant Database
+
+    User->>App: Select playlist (Playlist)
+    App->>Backend: Request playlist (PlaylistID)
+    Backend->>Playlist: getSongs()
+    Playlist-->>Backend: List of Songs
+    Backend-->>App: Playlist details
+    App-->>User: Show playlist
+    User->>App: Select song (Song)
+    App->>Backend: addSong(UserID, PlaylistID, SongID)
+    Backend->>Song: getSongId()
+    Song-->>Backend: songId
+    Backend->>Playlist: addSong(Song)
+
+    alt Song is not already in the playlist
+
+        Playlist->>Playlist: Add Song
+        Playlist-->>Backend: Song added successfully
+        Backend->>Database: savePlaylistSong(PlaylistID, SongID)
+        Database-->>Backend: Saved
+        Backend-->>App: true
+        App-->>User: Song added to playlist
+
+    else Song is already in the playlist
+
+        Playlist-->>Backend: false
+        Backend-->>App: false
+        App-->>User: Song already exists in playlist
+
+    end
