@@ -129,6 +129,6 @@ Artist "1" *-- "0..*" Album : creates
 Artist ..> Notification : creates
 Album "1" *-- "0..*" Song : contains
 Notification "0..*" --> "1" Song : announces
-Library "0..*" o-- "0..*" Album : stores
-Library "0..*" o-- "0..*" Song : saves
+Library "1" o-- "0..*" Album : stores
+Library "1" o-- "0..*" Song : saves
 Playlist "0..*" o-- "0..*" Song : contains
